@@ -5,9 +5,11 @@ const TodoApp = () => {
     const { newTodo,
         todos,
         setNewTodo,
+        setEditId,
         addTodoHandler,
         onRemoveTodoHandler,
         onTodoStatusHandler } = useContext(TodoContext)
+
 
 
     const renderItem = ({ item }) => (
@@ -26,7 +28,13 @@ const TodoApp = () => {
                         {item.status === 'Pending' ? 'Done' : 'Pending'}
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.todoButton}>
+                <TouchableOpacity
+                    onPress={() => {
+                        setNewTodo(item.todo)
+                        setEditId(item.id)
+
+                    }}
+                    style={styles.todoButton}>
                     <Text style={styles.todoButtonText}>Edit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity

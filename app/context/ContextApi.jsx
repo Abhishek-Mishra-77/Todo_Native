@@ -6,6 +6,7 @@ const TodoContext = createContext(null);
 const TodoProvider = ({ children }) => {
     const [newTodo, setNewTodo] = useState('');
     const [todos, setTodos] = useState([])
+    const [editId, setEditId] = useState("");
 
 
     const addTodoHandler = () => {
@@ -13,8 +14,23 @@ const TodoProvider = ({ children }) => {
             ToastAndroid.show('Please enter todo', ToastAndroid.SHORT);
             return;
         }
-        setTodos((prev) => [...prev, { todo: newTodo, status: "Pending", id: Math.random().toString() }])
-        ToastAndroid.show('Todo Added successfully', ToastAndroid.SHORT);
+        if (editId) {
+            const updatedTodos = todos.map((todo) => {
+                if (todo.id == editId) {
+                    return { ...todo, todo: newTodo }
+                }
+                return todo;
+            })
+            setTodos(updatedTodos)
+            ToastAndroid.show('Todo updated successfully', ToastAndroid.SHORT);
+        }
+        else {
+            setTodos((prev) => [...prev, { todo: newTodo, status: "Pending", id: Math.random().toString() }])
+            ToastAndroid.show('Todo Added successfully', ToastAndroid.SHORT);
+            setNewTodo("")
+        }
+        setEditId("")
+        setNewTodo("")
     }
 
     const onRemoveTodoHandler = (id) => {
@@ -39,6 +55,7 @@ const TodoProvider = ({ children }) => {
     const ctc = {
         newTodo,
         todos,
+        setEditId,
         setNewTodo,
         addTodoHandler,
         onRemoveTodoHandler,
